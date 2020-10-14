@@ -1,0 +1,77 @@
+name: Build executables
+
+on:
+  push:
+    branches: [ main ]
+
+  release:
+    types: [ published ]
+
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-20.04
+            artifact_name: DMonitor
+            asset_name: DMonitorLinux
+          - os: windows-latest
+            artifact_name: DMonitor.exe
+            asset_name: DMonitorWin.exe
+          - os: macos-latest
+            artifact_name: DMonitor.zip
+            asset_name: DMonitorMacOS.zip
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install System Dependencies
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          pip install -U -f https://extras.wxpython.org/wxPython4/extras/linux/gtk3/ubuntu-20.04 wxPython
+
+      - name: Install Dependencies
+        run: |
+          pip install -U pip wheel
+          pip install -r requirements.txt
+          pip install -r requirements-dev.txt
+
+      - name: Build Artifact
+        env:
+          DMONITOR_STATHAT_KEY: ${{ secrets.DMONITOR_STATHAT_KEY }}
+        run: |
+          cd dmonitor/build
+          python make_hook.py
+          pyinstaller --noconsole --noconfirm --clean --onefile --name DMonitor --paths .. --icon icon.ico --runtime-hook hook.py ../main.py
+
+      - name: Zip Executable
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          cd dmonitor/build/dist
+          zip -r -X DMonitor.zip DMonitor.app
+          rm -rf DMonitor.app
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          path: dmonitor/build/dist/${{ matrix.artifact_name }}
+
+      - name: Upload Binaries to Release
+        if: github.event_name == 'release'
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
+          file: dmonitor/build/dist/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.asset_name }}
+          overwrite: true

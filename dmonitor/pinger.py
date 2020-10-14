@@ -1,21 +1,19 @@
 import json
 import time
-from pathlib import Path
 from typing import Tuple
+
+import ping3
 
 import config
 from stathat import StatHat
-import ping3
+from utils import project_path
 
 
 class Pinger:
     def __init__(self, stathat: StatHat):
         self.stathat = stathat
         self.data = {}
-        self.data_file = Path.home() / Path('.dmonitor/data.json')
-
-        self.data_file.parent.mkdir(parents=True, exist_ok=True)
-        self.data_file.touch()
+        self.data_file = project_path('data.json')
         self.load()
 
     def load(self):

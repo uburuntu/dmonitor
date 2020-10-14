@@ -1,4 +1,4 @@
-ping3==2.6
-PySimpleGUIQt==0.17
-wxPython==4.1
-requests==2.24
+ping3>=2.6
+PySimpleGUIWx>=0.17
+wxPython>=4.1
+requests>=2.24

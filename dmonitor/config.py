@@ -2,7 +2,7 @@ import os
 
 stathat_key = os.getenv('DMONITOR_STATHAT_KEY')
 
-if stathat_key is None:
+if not stathat_key:
     raise Exception('You should set `DMONITOR_STATHAT_KEY` environment variable')
 
 domains = ('google.com', 'yandex.ru', 'vk.com')
