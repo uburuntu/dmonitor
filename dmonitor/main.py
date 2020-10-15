@@ -29,30 +29,34 @@ def main():
                      'Это окно можно закрыть, я продолжу работать в фоновом режиме.\n\n'
                      'Спасибо за участие!', icon=config.icon)
 
-    while True:
-        event = tray.read(timeout=1000)
+    try:
+        while True:
+            event = tray.read(timeout=1000)
 
-        if timer.acquire():
-            if ip_checker.check():
-                ok = pinger.analyze()
-                if ok:
-                    last_send = f'Последняя отправка данных: {time.ctime()}'
-                    tray.update(tooltip=f'{tooltip}\n\n{last_send}')
+            if timer.acquire():
+                if ip_checker.check():
+                    ok = pinger.analyze()
+                    if ok:
+                        last_send = f'Последняя отправка данных: {time.ctime()}'
+                        tray.update(tooltip=f'{tooltip}\n\n{last_send}')
+                    else:
+                        if timer_notification_1.acquire():
+                            sg.popup_no_wait(f'Проблема с доступом к одному из сайтов: {", ".join(config.domains)}', icon=config.icon)
                 else:
-                    if timer_notification_1.acquire():
-                        sg.popup_no_wait(f'Проблема с доступом к одному из сайтов: {", ".join(config.domains)}', icon=config.icon)
-            else:
-                if timer_notification_2.acquire():
-                    sg.popup_no_wait('Кажется, вы подключены не к сети МГУ.\n\n'
-                                     'Выгрузка статистики приостановлена до переподключения к ней.', icon=config.icon)
+                    if timer_notification_2.acquire():
+                        sg.popup_no_wait('Кажется, вы подключены не к сети МГУ.\n\n'
+                                         'Выгрузка статистики приостановлена до переподключения к ней.', icon=config.icon)
 
-        if event == 'Закрыть':
-            break
+            if event == 'Закрыть':
+                break
 
-        if event == 'Информация':
-            sg.popup_no_wait(f'{config.text_about}\n\n{last_send}', icon=config.icon)
-
-    tray.close()
+            if event == 'Информация':
+                sg.popup_no_wait(f'{config.text_about}\n\n{last_send}', icon=config.icon)
+    except Exception:
+        raise
+    finally:
+        tray.close()
+        time.sleep(15 * 60)
 
 
 if __name__ == '__main__':
