@@ -49,9 +49,9 @@ class Pinger:
         try:
             for k, v in self.data.items():
                 if v.get('downtime'):
-                    self.stathat.post_count('@ds_msu - downtime', 1, timestamp=int(k))
-                self.stathat.post_count('@ds_msu - submissions', 1, timestamp=int(k))
-                self.stathat.post_value('@ds_msu - avg ping', v['avg'], timestamp=int(k))
+                    self.stathat.post_count('msu - downtime', 1, timestamp=int(k))
+                self.stathat.post_count('msu - submissions', 1, timestamp=int(k))
+                self.stathat.post_value('msu - avg ping', v['avg'], timestamp=int(k))
         except Exception:
             pass
         else:

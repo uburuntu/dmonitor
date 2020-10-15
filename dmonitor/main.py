@@ -22,7 +22,7 @@ def main():
 
     menu = ['UNUSED', ['Информация', '---', 'Закрыть']]
     last_send = 'Данные еще не отправлялись'
-    tooltip = 'Мониторинг интернета в общежитии ГЗ'
+    tooltip = 'Мониторинг интернета в общежитиях МГУ'
     tray = sg.SystemTray(menu=menu, tooltip=f'{tooltip}\n\n{last_send}', data_base64=config.icon)
 
     sg.popup_no_wait('Мониторинг интернета запущен, выгрузка статистики начнётся через 1 минуту.\n\n'
@@ -43,7 +43,7 @@ def main():
                         sg.popup_no_wait(f'Проблема с доступом к одному из сайтов: {", ".join(config.domains)}', icon=config.icon)
             else:
                 if timer_notification_2.acquire():
-                    sg.popup_no_wait('Кажется, вы подключены не к сети Главного здания.\n\n'
+                    sg.popup_no_wait('Кажется, вы подключены не к сети МГУ.\n\n'
                                      'Выгрузка статистики приостановлена до переподключения к ней.', icon=config.icon)
 
         if event == 'Закрыть':

@@ -11,9 +11,9 @@ icon = b'iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAAGXRFWHRTb2Z0d2FyZQBBZG9
 
 text_about = '''DMonitor
 
-Программа для анализа доступности интернета в общежитии Главного здания.
+Программа для анализа доступности интернета в общежитиях МГУ.
 
-Чат в Telegram: https://t.me/ds_msu
+Чаты в Telegram: t.me/ds_msu, t.me/dsl_msu
 
 Исходники: https://github.com/uburuntu/dmonitor
 '''
