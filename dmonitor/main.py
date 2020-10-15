@@ -1,4 +1,5 @@
 import time
+import traceback
 
 import PySimpleGUIWx as sg
 
@@ -52,11 +53,10 @@ def main():
 
             if event == 'Информация':
                 sg.popup_no_wait(f'{config.text_about}\n\n{last_send}', icon=config.icon)
-    except Exception:
-        raise
+    except Exception as e:
+        sg.popup_ok(f'Exception: {repr(e)}\n\nTraceback: {traceback.format_exc()}', icon=config.icon)
     finally:
         tray.close()
-        time.sleep(15 * 60)
 
 
 if __name__ == '__main__':

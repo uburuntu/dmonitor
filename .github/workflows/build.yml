@@ -23,9 +23,9 @@ jobs:
           - os: windows-latest
             artifact_name: DMonitor.exe
             asset_name: DMonitorWin.exe
-#          - os: macos-latest
-#            artifact_name: DMonitor.zip
-#            asset_name: DMonitorMacOS.zip
+          - os: macos-latest
+            artifact_name: DMonitor.zip
+            asset_name: DMonitorMacOS.zip
 
     steps:
       - uses: actions/checkout@v2
@@ -52,15 +52,13 @@ jobs:
         run: |
           cd dmonitor/build
           python make_hook.py
-          # pyinstaller --noconsole --noconfirm --clean --onefile --name DMonitor --paths .. --icon icon.ico --runtime-hook hook.py ../main.py
-          pyinstaller --noconfirm --clean --onefile --name DMonitor --paths .. --icon icon.ico --runtime-hook hook.py ../main.py
+          pyinstaller --noconsole --noconfirm --clean --onefile --name DMonitor --paths .. --icon icon.ico --runtime-hook hook.py ../main.py
 
       - name: Zip Executable
         if: startsWith(matrix.os, 'macos')
         run: |
           cd dmonitor/build/dist
           zip -r -X DMonitor.zip DMonitor.app
-          rm -rf DMonitor.app
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2
