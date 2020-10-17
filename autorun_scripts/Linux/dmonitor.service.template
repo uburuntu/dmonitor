@@ -1,0 +1,10 @@
+[Unit]
+Description=DMonitor
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=path
+
+[Install]
+WantedBy=multi-user.target
