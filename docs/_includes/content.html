@@ -1,0 +1,16 @@
+<main>
+  {{ content }}
+</main>
+
+<footer class="footer">
+  {%- assign year_from = site.posts[-1].date | date: '%Y' -%}
+  {%- assign year_to   = site.time | date: '%Y' -%}
+  {%- if year_from == nil or year_from == year_to -%}
+    {%- assign year_string = year_from -%}
+  {%- else -%}
+    {%- assign year_string = year_from | append: '&nbsp;' | append: '-' | append: '&nbsp;' | append: year_to -%}
+  {%- endif -%}
+  <small>
+    &copy; Экосистема чатов МГУ: <a href="https://t.me/chat_msu">@chat_msu</a>. Тема: <a href="https://github.com/vszhub/not-pure-poole">Not Pure Poole</a>.
+  </small>
+</footer>

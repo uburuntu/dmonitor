@@ -1,11 +1,9 @@
-# DMonitor
+---
+layout: page
+title: Присоединиться
+---
 
-## Программа для мониторинга интернета в общежитиях МГУ
-
-> ![](https://i.imgur.com/8fSJOVs.jpg)
-
-
-## Зачем
+## Зачем это всё
 - интернет в общежитиях МГУ должен быть лучше
 - собираемая статистика поможет понять проблемы
 
@@ -14,7 +12,7 @@
 
 Для этого нужно всего лишь запустить программу `DMonitor` и держать её открытой.
 
-Скачать `DMonitor` можно в разделе [релизы](https://github.com/uburuntu/dmonitor/releases/latest).
+Скачать `DMonitor` можно на [GitHub](https://github.com/uburuntu/dmonitor/releases/latest).
 
 ## Про DMonitor
 
@@ -35,10 +33,6 @@
 - если возникают какие-то проблемы, то сообщайте
 - если есть идеи и предложения, то не стесняйтесь предлагать и обсуждать
 
-## Графики
+## Исходный код
 
-https://internet.msut.me
-
-## Скачать
-
-https://github.com/uburuntu/dmonitor/releases
+Доступен на [GitHub](https://github.com/uburuntu/dmonitor).

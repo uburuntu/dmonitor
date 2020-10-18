@@ -1,0 +1,21 @@
+plugins:
+  - jekyll-remote-theme
+
+remote_theme: vszhub/not-pure-poole
+
+title: DMonitor
+description: Мониторинг интернета в общежитиях МГУ
+url: https://internet.msut.me
+lang: ru
+
+avatar: /avatar.jpg
+cover_image: /bg.jpg
+cover_bg_color: rgb(249, 150, 31)
+logo: /avatar.jpg
+
+google_analytics: UA-123345095-9
+social:
+  name: MSU Hub
+  links:
+    - https://t.me/msu_hub
+    - https://t.me/chat_msu
