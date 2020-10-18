@@ -1,5 +1,7 @@
 # DMonitor
 
+[![](https://img.shields.io/badge/%D0%A7%D0%B0%D1%82%D1%8B%20%D0%9C%D0%93%D0%A3-%40chat__msu-blue)](https://t.me/chat_msu/22333)
+
 ## Программа для мониторинга интернета в общежитиях МГУ
 
 > ![](https://i.imgur.com/8fSJOVs.jpg)
@@ -41,23 +43,23 @@ https://internet.msut.me
 
 ## Скачать
 
-https://github.com/uburuntu/dmonitor/releases
+https://github.com/uburuntu/dmonitor/releases/latest
 
-#### Настроить автозапуск
+### Настроить автозапуск
 
 Для запуска программы при перезагрузке системы можно воспользоваться [скриптами](https://github.com/uburuntu/dmonitor/autorun_scripts) (потребуются администраторские права). 
 
-###### Windows
+#### Windows
 
 - Запустите `dmonitor_autorun.bat` от имени администратора
 - Введите путь к `DMonitorWin.exe`
 
-###### Linux
+#### Linux
 
 - Запустите `dmonitor_autorun.sh`
 - Введите путь к `DMonitorLinux`
 
-###### MacOS
+#### MacOS
 
 - Запустите `dmonitor_autorun.bash`
 - Введите путь к `DMonitorMacOS.zip`
