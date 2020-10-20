@@ -28,7 +28,7 @@ title: Присоединиться
 Чаты общежитий:
 - Главное здание: [@ds_msu](https://t.me/ds_msu)
 - ДСЛ: [@dsl_msu](https://t.me/dsl_msu)
-- ДСЛ: [@das_msu](https://t.me/das_msu)
+- ДАС: [@das_msu](https://t.me/das_msu)
 
 Будем рады обратной связи:
 - если возникают какие-то проблемы, то сообщайте
