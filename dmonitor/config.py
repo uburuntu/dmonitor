@@ -12,8 +12,9 @@ icon = b'iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAAGXRFWHRTb2Z0d2FyZQBBZG9
 text_about = '''Программа для анализа доступности интернета в общежитиях МГУ.
 
 Чаты в Telegram: 
-- Главное здание: https://t.me/ds_msu
+- ГЗ: https://t.me/ds_msu
 - ДСЛ: https://t.me/dsl_msu
+- ДАС: https://t.me/das_msu
 
 Графики: https://internet.msut.me
 

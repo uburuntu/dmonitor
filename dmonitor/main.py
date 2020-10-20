@@ -56,11 +56,11 @@ def main():
             event = tray.read(timeout=1000)
 
             if timer.acquire():
-                if ip_checker.check():
-                    ok = pinger.analyze()
+                if provider := ip_checker.provider():
+                    ok = pinger.analyze(provider)
                     if ok:
                         last_send = f'Последняя отправка данных: {time.ctime()}'
-                        tray.update(tooltip=f'{tooltip}\n\n{last_send}.')
+                        tray.update(tooltip=f'{tooltip}\n\n{last_send}')
                     else:
                         if timer_notification_1.acquire():
                             popup(f'Проблема с доступом к одному из сайтов: {", ".join(config.domains)}.\n\n'

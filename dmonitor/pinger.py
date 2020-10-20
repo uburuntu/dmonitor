@@ -45,26 +45,29 @@ class Pinger:
         data['avg'] = sum(delays) / len(delays) if delays else 60_000
         return data, data['downtime']
 
-    def upload_metrics(self):
+    def upload_metrics(self, provider: str):
+        def prefix(p) -> str:
+            return f'msu - {p} - '
+
         try:
             for k, v in self.data.items():
                 if v.get('downtime'):
-                    self.stathat.post_count('msu - downtime', 1, timestamp=int(k))
-                self.stathat.post_count('msu - submissions', 1, timestamp=int(k))
-                self.stathat.post_value('msu - avg ping', v['avg'], timestamp=int(k))
+                    self.stathat.post_count(prefix(provider) + 'downtime', 1, timestamp=int(k))
+                self.stathat.post_count(prefix(provider) + 'submissions', 1, timestamp=int(k))
+                self.stathat.post_value(prefix(provider) + 'avg ping', v['avg'], timestamp=int(k))
         except Exception:
             pass
         else:
             self.data.clear()
 
-    def analyze(self):
+    def analyze(self, provider: str):
         key = self.key()
 
         data, downtime = self.ping()
         self.data[key] = data
 
         if not downtime:
-            self.upload_metrics()
+            self.upload_metrics(provider)
 
         self.dump()
         return not downtime

@@ -1,15 +1,36 @@
 import ipaddress
 import time
+from enum import Enum
 from pathlib import Path
 from typing import Optional
 
 import requests
 
 
-class CheckMyIP:
-    ip_start = '85.89.126.0'
-    ip_end = '85.89.127.255'
+class IPNetworks(Enum):
+    umos = (
+        ipaddress.ip_network('85.89.126.0/23'),
+    )
+    imt = (
+        ipaddress.ip_network('45.147.81.0/24'),
+        ipaddress.ip_network('45.147.82.0/23'),
+        ipaddress.ip_network('212.16.0.0/19'),
+        ipaddress.ip_network('212.16.0.0/20'),
+        ipaddress.ip_network('212.16.16.0/20'),
+        ipaddress.ip_network('212.16.16.0/21'),
+        ipaddress.ip_network('212.16.24.0/22'),
+    )
 
+    @classmethod
+    def provider(cls, ip: ipaddress.IPv4Address) -> Optional[str]:
+        for provider in cls:
+            for network in provider.value:
+                if ip in network:
+                    return provider.name
+        return None
+
+
+class CheckMyIP:
     def __init__(self):
         self.session = requests.Session()
         self.ip_file = project_path('ip.txt')
@@ -45,11 +66,11 @@ class CheckMyIP:
                 return None
         return ip
 
-    def check(self) -> bool:
+    def provider(self) -> Optional[str]:
         ip = self.get_ip()
         if ip is None:
-            return False
-        return ipaddress.ip_address(self.ip_start) <= ip <= ipaddress.ip_address(self.ip_end)
+            return None
+        return IPNetworks.provider(ip)
 
 
 class Timer:
