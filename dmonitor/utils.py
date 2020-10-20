@@ -1,10 +1,15 @@
 import ipaddress
+import os
+import sys
 import time
 from enum import Enum
 from pathlib import Path
 from typing import Optional
 
 import requests
+
+if sys.platform != 'win32':
+    import fcntl
 
 
 class IPNetworks(Enum):
@@ -82,12 +87,58 @@ class Timer:
         self.last = time.monotonic()
         return self
 
+    def reset(self):
+        self.last = 0
+        return self
+
     def acquire(self):
         curr_ts = time.monotonic()
         if self.last + self.interval > curr_ts:
             return False
         self.last = curr_ts
         return True
+
+
+class SingleInstance:
+    def __init__(self, lock_file: Path = None):
+        self.locked = False
+        self.lock_file = lock_file or project_path('lock')
+        self.fd = None
+
+    def try_lock(self) -> bool:
+        if sys.platform == 'win32':
+            try:
+                self.lock_file.unlink(missing_ok=True)
+                self.fd = os.open(str(self.lock_file), os.O_CREAT | os.O_EXCL | os.O_RDWR)
+            except OSError:
+                return False
+
+        else:
+            self.fd = self.lock_file.open('w')
+            self.fd.flush()
+            try:
+                fcntl.lockf(self.fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            except IOError:
+                return False
+
+        self.locked = True
+        return True
+
+    def unlock(self):
+        if not self.locked:
+            return
+
+        if sys.platform != 'win32':
+            fcntl.lockf(self.fd, fcntl.LOCK_UN)
+
+        if self.fd:
+            os.close(self.fd)
+
+        self.lock_file.unlink(missing_ok=True)
+        self.locked = False
+
+    def __del__(self):
+        self.unlock()
 
 
 def project_path(name: str) -> Path:

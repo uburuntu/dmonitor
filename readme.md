@@ -51,6 +51,14 @@ https://internet.msut.me
 
 https://github.com/uburuntu/dmonitor/releases/latest
 
+### Тонкости Linux версии
+
+Есть два варианта запуска:
+- запускать с `sudo`
+- единоразово дать разрешение программе трогать сокеты:
+  - `sudo setcap cap_net_raw+ep ./DMonitor-Linux` для GUI версии
+  - `sudo setcap cap_net_raw+ep ./DMonitor-Console-Linux` для консольной версии
+
 ### Настроить автозапуск
 
 Для запуска программы при перезагрузке системы можно воспользоваться [скриптами](https://github.com/uburuntu/dmonitor/autorun_scripts) (потребуются администраторские права). 
@@ -58,14 +66,14 @@ https://github.com/uburuntu/dmonitor/releases/latest
 #### Windows
 
 - Запустите `dmonitor_autorun.bat` от имени администратора
-- Введите путь к `DMonitorWin.exe`
+- Введите путь к `DMonitor-Windows.exe`
 
 #### Linux
 
 - Запустите `dmonitor_autorun.sh`
-- Введите путь к `DMonitorLinux`
+- Введите путь к `DMonitor-Linux`
 
 #### MacOS
 
 - Запустите `dmonitor_autorun.bash`
-- Введите путь к `DMonitorMacOS.zip`
+- Введите путь к `DMonitor-MacOS.zip`

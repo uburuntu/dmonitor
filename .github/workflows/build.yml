@@ -19,13 +19,24 @@ jobs:
         include:
           - os: ubuntu-20.04
             artifact_name: DMonitor
-            asset_name: DMonitorLinux
+            asset_name: DMonitor-Linux
+          - os: ubuntu-20.04
+            artifact_name: DMonitor-Console
+            asset_name: DMonitor-Console-Linux
+
           - os: windows-latest
             artifact_name: DMonitor.exe
-            asset_name: DMonitorWin.exe
+            asset_name: DMonitor-Windows.exe
+          - os: windows-latest
+            artifact_name: DMonitor-Console.exe
+            asset_name: DMonitor-Console-Windows.exe
+
           - os: macos-latest
             artifact_name: DMonitor.zip
-            asset_name: DMonitorMacOS.zip
+            asset_name: DMonitor-MacOS.zip
+          - os: macos-latest
+            artifact_name: DMonitor-Console.zip
+            asset_name: DMonitor-Console-MacOS.zip
 
     steps:
       - uses: actions/checkout@v2
@@ -46,7 +57,8 @@ jobs:
           pip install -r requirements.txt
           pip install -r requirements-dev.txt
 
-      - name: Build Artifact
+      - name: Build GUI Artifact
+        if: contains(matrix.asset_name, 'Console') == false
         env:
           DMONITOR_STATHAT_KEY: ${{ secrets.DMONITOR_STATHAT_KEY }}
         run: |
@@ -54,11 +66,26 @@ jobs:
           python make_hook.py
           pyinstaller --noconsole --noconfirm --clean --onefile --name DMonitor --paths .. --icon icon.ico --runtime-hook hook.py ../main.py
 
+      - name: Build Console Artifact
+        if: contains(matrix.asset_name, 'Console')
+        env:
+          DMONITOR_STATHAT_KEY: ${{ secrets.DMONITOR_STATHAT_KEY }}
+        run: |
+          cd dmonitor/build
+          python make_hook.py
+          pyinstaller --console --noconfirm --clean --onefile --name DMonitor-Console --paths .. --icon icon.ico --runtime-hook hook.py ../main_console.py
+
       - name: Zip Executable
         if: startsWith(matrix.os, 'macos')
         run: |
           cd dmonitor/build/dist
-          zip -r -X DMonitor.zip DMonitor.app
+          zip -r -X ${{ matrix.artifact_name }} .
+
+      - name: Make chmod +x
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          cd dmonitor/build/dist
+          chmod +x ${{ matrix.artifact_name }}
 
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2
