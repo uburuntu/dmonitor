@@ -23,11 +23,10 @@ def main():
         logging.critical('Одновременно может быть запущена только одна версия программы')
         return close(1)
 
-    timer = Timer(1 * 60.).start()
+    et = ExecutionTimer(60.)
     stathat = StatHat(config.stathat_key)
     pinger = Pinger(stathat)
     ip_checker = CheckMyIP()
-    et = ExecutionTimer(60., align_sleep=True)
 
     try:
         pinger.ping()
@@ -44,26 +43,25 @@ def main():
     timer_notify_lost = Timer(30 * 60.)
     timer_notify_net = Timer(30 * 60.)
 
-    logging.info('Мониторинг интернета запущен, выгрузка статистики начнётся через 1 минуту. Спасибо за участие!')
+    logging.info('Мониторинг интернета запущен. Спасибо за участие!')
 
     try:
         while True:
             with et:
-                if timer.acquire():
-                    if provider := ip_checker.provider():
-                        ok = pinger.analyze(provider)
-                        if ok:
-                            timer_notify_lost.reset()
-                        else:
-                            if timer_notify_lost.acquire():
-                                logging.warning(f'Проблема с доступом к одному из сайтов: {", ".join(config.domains)}. '
-                                                f'Информация об этом сохранена на диск и будет отправлена при первой возможности.')
-
-                        timer_notify_net.reset()
+                if provider := ip_checker.provider():
+                    ok = pinger.analyze(provider)
+                    if ok:
+                        timer_notify_lost.reset()
                     else:
-                        if timer_notify_net.acquire():
-                            logging.warning('Кажется, вы подключены не к сети МГУ. '
-                                            'Выгрузка статистики приостановлена до переподключения к ней.')
+                        if timer_notify_lost.acquire():
+                            logging.warning(f'Проблема с доступом к одному из сайтов: {", ".join(config.domains)}. '
+                                            f'Информация об этом сохранена на диск и будет отправлена при первой возможности.')
+
+                    timer_notify_net.reset()
+                else:
+                    if timer_notify_net.acquire():
+                        logging.warning('Кажется, вы подключены не к сети МГУ. '
+                                        'Выгрузка статистики приостановлена до переподключения к ней.')
 
     except (KeyboardInterrupt, SystemExit):
         logging.info('Bye!')
